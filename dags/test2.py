@@ -22,7 +22,7 @@ default_args = {
     # 'end_date': datetime(2016, 1, 1),
 }
 
-dag = DAG("tutorial1.1", default_args=default_args, schedule_interval='@daily', max_active_runs=1)
+dag = DAG("tutorial3.1", default_args=default_args, schedule_interval='@daily', max_active_runs=2)
 
 # t1, t2 and t3 are examples of tasks created by instantiating operators
 t1 = BashOperator(task_id="print_date", bash_command="date", dag=dag)

@@ -24,3 +24,16 @@ sftp-config.json
 
 # Python
 __pycache__
+
+# Distribution / packaging
+.Python
+venv/
+.venv/
+
+# MacOs and PyCharm files
+.DS_Store
+.idea
+
+# Ignore docker-compose folders
+dags/data/
+.odcvs_dockerdata/
