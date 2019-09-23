@@ -101,15 +101,3 @@ services:
             # - POSTGRES_DB=airflow
             # - REDIS_PASSWORD=redispass
         command: worker
-
-    datascience-notebook:
-        image: jupyter/datascience-notebook
-        depends_on:
-          - webserver
-        volumes:
-          - ./dags:/home/jovyan/work
-        ports:
-          - 8888:8888
-        container_name:   datascience-notebook-container
-        command: "start-notebook.sh \
-        --NotebookApp.password=sha1:837848ba3745:2d03c81185001be8667570c5beeae93110cfbdf4"
