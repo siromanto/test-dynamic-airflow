@@ -16,11 +16,23 @@ CONFIG_DB_KEY = 'extract_json_config'
 
 
 def say_hello(task_name, task_args):
+
+    if task_args.get('params').get('method') == 'method_one':
+        run_method_one(task_name)
+    else:
+        run_method_two(task_name)
+
+
+def run_method_one(name):
     print('*'*200)
-    print('Hello, {}'.format(task_name))
+    print('Hello, METHOD_ONE - {}'.format(name))
     print('*'*200)
 
 
+def run_method_two(name):
+    print('=' * 200)
+    print('METHOD_TWO - {}'.format(name))
+    print('=' * 200)
 
 
 # file_path = os.path.join(PROJECT_DIR, 'dags/data')
@@ -42,12 +54,6 @@ default_config = json.loads(json.dumps(default_config, default=str))
 #                              deserialize_json=True)
 
 config = default_config
-
-# print(f'CONFIG NEW DAG ====> {config}')
-# print(f"**config['dag'] ===> {config['dag']}")
-
-
-
 
 # Create the DAG
 with DAG(**config['dag']) as dag:
