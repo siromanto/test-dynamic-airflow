@@ -51,13 +51,16 @@ config = default_config
 
 # Create the DAG
 with DAG(**config['dag']) as dag:
+    tasks_dict = {}
+
     # Start the graph with a dummy task
     last_task = DummyOperator(task_id='start')
+
+    tasks_dict['start'] = last_task
 
     # Extend the graph with a task for each new name
     print(f"TASKS --->{config['tasks']}")
     for task_name, task_args in config['tasks'].items():
-        # method_name =
 
         task = PythonOperator(
             task_id='run_{}'.format(task_args['task_id']),
@@ -65,8 +68,14 @@ with DAG(**config['dag']) as dag:
             op_args=(task_name, task_args)
         )
 
-        last_task >> task
-        last_task = task
+        tasks_dict[task_name] = task
+
+        if task_args.get('dependencies'):
+            task.set_upstream(tasks_dict.get(task_args.get('dependencies')))
+        else:
+            # in case if we will have init task
+            # last_task >> task
+            last_task.set_downstream(task)
 
 
 # Variable.delete(CONFIG_DB_KEY)
