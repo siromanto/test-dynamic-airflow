@@ -1,0 +1,27 @@
+dag:
+  dag_id: extract_json1
+  schedule_interval: '@daily'
+  description: 'this is an example dag!'
+
+  default_args:
+    owner: "airflow"
+    depends_on_past: False
+    start_date: 2019-09-29T00:00:00Z
+    email": "airflow@airflow.com"
+    email_on_failure: False
+    email_on_retry: False
+    retries: 1
+    retry_delay: 5
+    max_active_runs: 3
+
+tasks:
+  task_1:
+    task_id: first_method
+    callable_method: say_hello
+  task_2:
+    task_id: second_method
+    callable_method: say_hello
+  task_3:
+    task_id: third_method
+    callable_method: say_hello
+
