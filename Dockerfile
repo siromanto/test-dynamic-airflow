@@ -63,7 +63,6 @@ RUN set -ex \
     && pip install 'Flask==1.0.4' \
     && pip install 'docker' \
     && pip install 'docker-compose' \
-    && pip install 'docker-py' \
     && pip install 'psycopg2-binary' \
     && if [ -n "${PYTHON_DEPS}" ]; then pip install ${PYTHON_DEPS}; fi \
     && apt-get purge --auto-remove -yqq $buildDeps \
