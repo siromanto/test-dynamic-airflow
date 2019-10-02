@@ -7,6 +7,7 @@ from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
+from airflow.operators.docker_operator import DockerOperator
 
 
 PROJECT_DIR = os.getcwd()
@@ -68,11 +69,26 @@ with DAG(**config['dag']) as dag:
     print(f"TASKS --->{config['tasks']}")
     for task_name, task_args in config['tasks'].items():
 
-        task = PythonOperator(
-            task_id='run_{}'.format(task_args['task_id']),
-            python_callable=eval(task_args['callable_method']),
-            op_args=(task_name, task_args)
-        )
+        if task_args['task_operator'] == 'PythonOperator':
+            task = PythonOperator(
+                task_id='run_{}'.format(task_args['task_id']),
+                python_callable=eval(task_args['callable_method']),
+                op_args=(task_name, task_args)
+            )
+        elif task_args['task_operator'] == 'DockerOperator':
+            task = DockerOperator(
+                task_id=task_args['task_id'],
+                image=task_args['image'],
+                api_version=task_args['api_version'],
+                auto_remove=task_args['auto_remove'],
+                environment={
+                        'AF_EXECUTION_DATE': task_args['environment']['af_execution_date'],
+                        'AF_OWNER': task_args['environment']['af_owner']
+                },
+                command=task_args['command'],
+                docker_url=task_args['docker_url'],
+                network_mode=task_args['network_mode']
+            )
 
         tasks_dict[task_name] = task
 

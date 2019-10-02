@@ -17,19 +17,33 @@ dag:
 tasks:
   task_1:
     task_id: first_method
+    task_operator: PythonOperator
     callable_method: say_hello
     params:
       method: method_one
   task_2:
     task_id: second_method
+    task_operator: PythonOperator
     callable_method: say_hello
     dependencies: task_1
     params:
       method: method_one
   task_3:
     task_id: third_method
+    task_operator: PythonOperator
     callable_method: say_hello
     dependencies: task_2
     params:
       method: method_two
-
+  task_4:
+    task_id: docker_command
+    task_operator: DockerOperator
+    image: centos:latest
+    api_version: auto
+    auto_remove: True
+    command: '/bin/bash -c \'echo "TASK ID (from macros): {{ task.task_id }} - EXECUTION DATE (from env vars): $AF_EXECUTION_DATE"\''
+    docker_url: unix://var/run/docker.sock
+    network_mode: bridge
+    environment:
+      af_execution_date: "{{ ds }}"
+      af_owner: "{{ task.owner }}"
