@@ -38,10 +38,12 @@ tasks:
   task_4:
     task_id: docker_command
     task_operator: DockerOperator
+    dependencies: task_3
     image: centos:latest
     api_version: auto
     auto_remove: True
-    command: '/bin/bash -c \'echo "TASK ID (from macros): {{ task.task_id }} - EXECUTION DATE (from env vars): $AF_EXECUTION_DATE"\''
+    command: >
+      /bin/bash -c \'echo "TASK ID (from macros): {{ task.task_id }} - EXECUTION DATE (from env vars): $AF_EXECUTION_DATE" '
     docker_url: unix://var/run/docker.sock
     network_mode: bridge
     environment:
